@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +61,9 @@ public class PedidoService {
         pedido.setValorTotal(valorTotal);
 
         return pedidoRepository.save(pedido);
+    }
+
+    public List<Pedido> listarPedidos() {
+        return pedidoRepository.findAll();
     }
 }
