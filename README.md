@@ -2,51 +2,57 @@
 
 Aplicação web desenvolvida como trabalho acadêmico utilizando Java Spring Boot no back-end, React com TypeScript no front-end e MySQL como banco de dados.
 
+---
+
 ## Funcionalidades
 
 ### Área de Gerenciamento
 
-* Cadastrar produtos
-* Editar produtos
-* Excluir produtos
-* Listar todos os produtos
-* Ativar ou desativar produtos
+- Cadastrar produtos
+- Editar produtos
+- Excluir produtos
+- Listar todos os produtos
+- Ativar ou desativar produtos
 
 ### Área do Cliente
 
-* Visualizar apenas produtos disponíveis
-* Adicionar produtos ao carrinho
-* Finalizar pedidos
-* Persistir pedidos no banco de dados
+- Visualizar apenas produtos disponíveis
+- Adicionar produtos ao carrinho
+- Finalizar pedidos
+- Persistir pedidos no banco de dados
+
+---
 
 ## Tecnologias Utilizadas
 
 ### Back-end
 
-* Java 17
-* Spring Boot
-* Spring Web
-* Spring Data JPA
-* Lombok
-* MySQL
+- Java 17
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Lombok
+- MySQL
 
 ### Front-end
 
-* React
-* TypeScript
-* Vite
-* Axios
-* React Query
+- React
+- TypeScript
+- Vite
+- Axios
+- React Query
 
 ### Banco de Dados
 
-* MySQL
+- MySQL
+
+---
 
 ## Estrutura do Projeto
 
 ### Back-end
 
-```
+```text
 src/main/java
 
 ├── controller
@@ -58,7 +64,7 @@ src/main/java
 
 ### Front-end
 
-```
+```text
 src
 
 ├── pages
@@ -69,6 +75,8 @@ src
 └── routes
 ```
 
+---
+
 ## Script de Criação do Banco
 
 ```sql
@@ -77,11 +85,11 @@ CREATE DATABASE restaurante;
 USE restaurante;
 ```
 
-> As tabelas são criadas automaticamente pelo Hibernate ao iniciar a aplicação.
+As tabelas são criadas automaticamente pelo Hibernate.
 
-## Configuração do Banco de Dados
+---
 
-No arquivo `application.properties`:
+## Configuração do Banco
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/restaurante
@@ -92,83 +100,305 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
-## Como Executar o Back-end
+---
 
-1. Abrir o projeto no IntelliJ IDEA.
-2. Configurar o banco MySQL.
-3. Ajustar usuário e senha do banco no arquivo `application.properties`.
-4. Executar a classe principal do Spring Boot.
+# Como Executar
 
-A API estará disponível em:
+## Back-end
+
+```bash
+./mvnw spring-boot:run
+```
+
+ou execute a classe principal pelo IntelliJ.
+
+API:
 
 ```
 http://localhost:8080
 ```
 
-## Como Executar o Front-end
+---
 
-Instalar as dependências:
+## Front-end
 
 ```bash
 npm install
-```
-
-Executar o projeto:
-
-```bash
 npm run dev
 ```
 
-A aplicação estará disponível em:
+Aplicação:
 
 ```
 http://localhost:5173
 ```
 
-## Principais Endpoints
+---
 
-### Produtos
+# Documentação da API
 
-```http
-GET /produtos
+## Produtos
+
+### Listar todos
+
+**GET**
+
+```
+/produtos
 ```
 
-Lista todos os produtos.
+### Resposta
 
-```http
-GET /produtos/ativos
+```json
+[
+  {
+    "id": 1,
+    "nome": "X-Burger",
+    "descricao": "Hambúrguer artesanal",
+    "preco": 29.90,
+    "ativo": true
+  }
+]
 ```
 
-Lista apenas os produtos disponíveis.
+---
 
-```http
-POST /produtos
+### Listar somente ativos
+
+**GET**
+
+```
+/produtos/ativos
 ```
 
-Cria um novo produto.
+### Resposta
 
-```http
-PUT /produtos/{id}
+```json
+[
+  {
+    "id": 1,
+    "nome": "X-Burger",
+    "descricao": "Hambúrguer artesanal",
+    "preco": 29.90,
+    "ativo": true
+  }
+]
 ```
 
-Atualiza um produto.
+---
 
-```http
-DELETE /produtos/{id}
+### Criar produto
+
+**POST**
+
+```
+/produtos
 ```
 
-Remove um produto.
+### Body
 
-### Pedidos
-
-```http
-POST /pedidos/finalizar
+```json
+{
+  "nome": "Pizza Calabresa",
+  "descricao": "Pizza grande de calabresa",
+  "preco": 59.90,
+  "ativo": true
+}
 ```
 
-Finaliza uma compra e salva o pedido no banco de dados.
+### Resposta
 
-## Autor
+```json
+{
+  "id": 3,
+  "nome": "Pizza Calabresa",
+  "descricao": "Pizza grande de calabresa",
+  "preco": 59.90,
+  "ativo": true
+}
+```
 
-Luis Henrique Machado
+---
 
-Trabalho desenvolvido para a disciplina de Desenvolvimento Web.
+### Atualizar produto
+
+**PUT**
+
+```
+/produtos/{id}
+```
+
+### Body
+
+```json
+{
+  "nome": "Pizza Portuguesa",
+  "descricao": "Pizza com presunto, ovos e cebola",
+  "preco": 64.90,
+  "ativo": true
+}
+```
+
+---
+
+### Excluir produto
+
+**DELETE**
+
+```
+/produtos/{id}
+```
+
+Resposta:
+
+```
+204 No Content
+```
+
+---
+
+# Pedidos
+
+## Finalizar Pedido
+
+**POST**
+
+```
+/pedidos/finalizar
+```
+
+### Body
+
+```json
+{
+  "cliente": "Luis Henrique",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 2
+    },
+    {
+      "produtoId": 4,
+      "quantidade": 1
+    }
+  ]
+}
+```
+
+### Resposta
+
+```json
+{
+  "id": 15,
+  "cliente": "Luis Henrique",
+  "valorTotal": 119.70,
+  "data": "2026-06-30T19:45:21",
+  "status": "FINALIZADO"
+}
+```
+
+---
+
+# Testando no Postman
+
+Importe as requisições abaixo.
+
+## Criar Produto
+
+```
+POST http://localhost:8080/produtos
+```
+
+Headers
+
+```
+Content-Type: application/json
+```
+
+Body
+
+```json
+{
+  "nome": "Pizza Quatro Queijos",
+  "descricao": "Molho, mussarela, parmesão, provolone e gorgonzola",
+  "preco": 72.90,
+  "ativo": true
+}
+```
+
+---
+
+## Atualizar Produto
+
+```
+PUT http://localhost:8080/produtos/1
+```
+
+Body
+
+```json
+{
+  "nome": "Pizza Quatro Queijos Grande",
+  "descricao": "Borda recheada",
+  "preco": 79.90,
+  "ativo": true
+}
+```
+
+---
+
+## Buscar Produtos
+
+```
+GET http://localhost:8080/produtos
+```
+
+---
+
+## Buscar Produtos Ativos
+
+```
+GET http://localhost:8080/produtos/ativos
+```
+
+---
+
+## Excluir Produto
+
+```
+DELETE http://localhost:8080/produtos/1
+```
+
+---
+
+## Finalizar Pedido
+
+```
+POST http://localhost:8080/pedidos/finalizar
+```
+
+Body
+
+```json
+{
+  "cliente": "Luis Henrique",
+  "itens": [
+    {
+      "produtoId": 2,
+      "quantidade": 1
+    },
+    {
+      "produtoId": 3,
+      "quantidade": 2
+    }
+  ]
+}
+```
+
+---
+
+# Autor
+
+**Luis Henrique Machado**
+
+Projeto desenvolvido para a disciplina de Desenvolvimento Web utilizando Java Spring Boot, React e MySQL.
